@@ -1,0 +1,29 @@
+{
+  "name": "atom-npm-client-api",
+  "version": "0.1.0",
+  "description": "NPM client API for Atom",
+  "main": "lib/npm",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tomi77/atom-npm-client-api.git"
+  },
+  "keywords": [
+    "atom",
+    "npm"
+  ],
+  "author": "Tomasz Jakub Rup",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tomi77/atom-npm-client-api/issues"
+  },
+  "homepage": "https://github.com/tomi77/atom-npm-client-api",
+  "dependencies": {
+    "lodash": "^4.16.0",
+    "npm": "^3.10.7",
+    "promise": "^7.1.1",
+    "read-package-json": "^2.0.4"
+  }
+}
