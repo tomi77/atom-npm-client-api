@@ -31,12 +31,9 @@ Multiple projects in one window are supported.
 ### Run script
 
 ~~~coffee-script
-pkg.run 'test'
-pkg.on 'exit', (code, stdout, stderr) ->
-  if code
-    console.error stderr
-  else
-    console.log stdout
+pkg.run('test')
+.then ({stdout, stderr}) -> console.log stdout, stderr
+.catch ({code, stdout, stderr}) -> console.error code, stdout, stderr
 ~~~
 
 ### List outdated packages

@@ -1,11 +1,10 @@
 {BufferedProcess} = require 'atom'
-EventEmitter = require 'events'
 
 {makeEnv} = require 'npm/lib/utils/lifecycle'
 extend = require 'lodash/extend'
 Promise = require 'promise'
 
-module.exports = class Package extends EventEmitter
+module.exports = class Package
   constructor: (@wd, pkg, @npm) ->
     extend @, pkg
 
@@ -20,27 +19,32 @@ module.exports = class Package extends EventEmitter
     stdoutBuffer = []
     stderrBuffer = []
 
-    new BufferedProcess
-      command: 'npm'
-      args: ['run', script]
-      options: @conf
-      stdout: (output) ->
-        stdoutBuffer = stdoutBuffer.concat output
-        return
-      stderr: (output) ->
-        stderrBuffer = stderrBuffer.concat output
-        return
-      exit: (code) =>
-        @emit 'exit', code, stdoutBuffer.join('\n'), stderrBuffer.join('\n')
-        return
+    new Promise (resolve, reject) =>
+      new BufferedProcess
+        command: 'npm'
+        args: ['run', script]
+        options: @conf
+        stdout: (output) ->
+          stdoutBuffer = stdoutBuffer.concat output
+          return
+        stderr: (output) ->
+          stderrBuffer = stderrBuffer.concat output
+          return
+        exit: (code) ->
+          if code
+            reject code: code, stdout: stdoutBuffer.join('\n'), stderr: stderrBuffer.join('\n')
+          else
+            resolve stdout: stdoutBuffer.join('\n'), stderr: stderrBuffer.join('\n')
+          return
 
-    return
+      return
 
   outdated: () ->
     new Promise (resolve, reject) =>
       @npm.prefix = @wd
       outdated = require 'npm/lib/outdated'
       outdated {}, (_, list) -> resolve list
+      return
 
   install: (name) ->
     name or= []
@@ -48,6 +52,7 @@ module.exports = class Package extends EventEmitter
       @npm.prefix = @wd
       install = require 'npm/lib/install'
       install name, (err) -> unless err? then resolve() else reject err
+      return
 
   update: (name) ->
     name or= []
@@ -55,3 +60,4 @@ module.exports = class Package extends EventEmitter
       @npm.prefix = @wd
       update = require 'npm/lib/update'
       update name, (err) -> unless err? then resolve() else reject err
+      return
