@@ -1,6 +1,7 @@
 # atom-npm-client-api
 
 [![dependencies Status](https://david-dm.org/tomi77/atom-npm-client-api/status.svg)](https://david-dm.org/tomi77/atom-npm-client-api)
+![Downloads](https://img.shields.io/npm/dt/atom-npm-client-api.svg)
 
 NPM client API for Atom
 
